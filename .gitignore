@@ -4,3 +4,4 @@ node_modules
 .DS_Store
 *.log
 dist/
+quill-better-table-7.4.0-dev.tgz
