@@ -22,6 +22,15 @@ const ERROR_LIMIT = 5
 
 class Container extends BaseContainer {
   // Missing in Parchment 1.x
+  optimize(_context) {
+    if (
+      this.statics.requiredContainer &&
+      !(this.parent instanceof this.statics.requiredContainer)
+    ) {
+      this.wrap(this.statics.requiredContainer.blotName);
+    }
+  }
+
   enforceAllowedChildren() {
     let done = false;
     this.children.forEach((child) => {
@@ -54,7 +63,43 @@ class Container extends BaseContainer {
 Container.scope = Parchment.Scope.BLOCK_BLOT;
 
 class Block extends BaseBlock {
-  
+  optimize(_context) {
+    if (
+      this.statics.requiredContainer &&
+      !(this.parent instanceof this.statics.requiredContainer)
+    ) {
+      this.wrap(this.statics.requiredContainer.blotName);
+    }
+  }
+
+  enforceAllowedChildren() {
+    let done = false;
+    this.children.forEach((child) => {
+      if (done) {
+        return;
+      }
+      const allowed = this.statics.allowedChildren.some(
+        (def) => child instanceof def,
+      );
+      if (allowed) {
+        return;
+      }
+      if (child.statics.scope === Parchment.Scope.BLOCK_BLOT) {
+        if (child.next != null) {
+          this.splitAfter(child);
+        }
+        if (child.prev != null) {
+          this.splitAfter(child.prev);
+        }
+        child.parent.unwrap();
+        done = true;
+      } else if (child.unwrap) {
+        child.unwrap();
+      } else {
+        child.remove();
+      }
+    });
+  }  
 }
 
 
