@@ -1,10 +1,12 @@
 import Quill from "quill"
+import Parchment from "parchment"
 import { getRelativeRect } from '../utils'
 import Header from './header'
 
 const Break = Quill.import("blots/break")
-const Block = Quill.import("blots/block")
-const Container = Quill.import("blots/container")
+const BaseBlock = Quill.import("blots/block")
+const BaseContainer = Quill.import("blots/container")
+
 
 const COL_ATTRIBUTES = ["width"]
 const COL_DEFAULT = {
@@ -17,6 +19,44 @@ const CELL_DEFAULT = {
   colspan: 1
 }
 const ERROR_LIMIT = 5
+
+class Container extends BaseContainer {
+  // Missing in Parchment 1.x
+  enforceAllowedChildren() {
+    let done = false;
+    this.children.forEach((child) => {
+      if (done) {
+        return;
+      }
+      const allowed = this.statics.allowedChildren.some(
+        (def) => child instanceof def,
+      );
+      if (allowed) {
+        return;
+      }
+      if (child.statics.scope === Parchment.Scope.BLOCK_BLOT) {
+        if (child.next != null) {
+          this.splitAfter(child);
+        }
+        if (child.prev != null) {
+          this.splitAfter(child.prev);
+        }
+        child.parent.unwrap();
+        done = true;
+      } else if (child.unwrap) {
+        child.unwrap();
+      } else {
+        child.remove();
+      }
+    });
+  }
+}
+Container.scope = Parchment.Scope.BLOCK_BLOT;
+
+class Block extends BaseBlock {
+  
+}
+
 
 class TableCellLine extends Block {
   static create(value) {
