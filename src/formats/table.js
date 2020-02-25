@@ -142,7 +142,7 @@ class TableCellLine extends Block {
   }
 }
 TableCellLine.blotName = "table-cell-line"
-TableCellLine.ClassName = "qlbt-cell-line"
+TableCellLine.className = "qlbt-cell-line"
 TableCellLine.tagName = "DIV"
 
 class TableCell extends Container {
