@@ -107,14 +107,16 @@ module.exports = (env, argv) => {
                         "last 2 Edge versions",
                         "last 2 Opera versions",
                         "last 2 Safari versions",
-                        "ie 11"
                       ],
-                      node: "current"
+                      node: "current",
+                      ie: 11
                     }
                   }
                 ]
               ],
-              plugins: ["transform-es2015-modules-commonjs"]
+              plugins: [
+                "@babel/plugin-transform-arrow-functions"
+              ]
             }
           }
         }
