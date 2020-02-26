@@ -1,6 +1,6 @@
 {
   "name": "quill-better-table",
-  "version": "1.2.8",
+  "version": "7.4.0-dev",
   "description": "Module for better table in Quill, more useful features are supported.",
   "main": "dist/quill-better-table.js",
   "scripts": {
@@ -27,8 +27,8 @@
   "homepage": "https://github.com/soccerloway/quill-better-table#readme",
   "dependencies": {},
   "devDependencies": {
-    "quill": "^2.0.0-dev.3",
     "@babel/core": "^7.4.3",
+    "@babel/plugin-transform-arrow-functions": "^7.8.3",
     "@babel/preset-env": "^7.4.3",
     "babel-loader": "^8.0.5",
     "babel-plugin-istanbul": "^5.1.1",
@@ -38,6 +38,7 @@
     "html-webpack-plugin": "^3.2.0",
     "mini-css-extract-plugin": "^0.5.0",
     "node-sass": "^4.11.0",
+    "quill": "^2.0.0-dev.3",
     "sass-loader": "^7.1.0",
     "style-loader": "^0.23.1",
     "url-loader": "^1.1.2",

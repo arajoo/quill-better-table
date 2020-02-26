@@ -100,18 +100,19 @@ module.exports = (env, argv) => {
                   {
                     targets: {
                       browsers: [
-                        'last 2 Chrome major versions',
-                        'last 2 Firefox major versions',
-                        'last 2 Safari major versions',
-                        'last 2 Edge major versions',
-                        'last 2 iOS major versions',
-                        'last 2 ChromeAndroid major versions',
-                      ],
+                        "last 2 Chrome versions",
+                        "last 2 Firefox versions",
+                        "last 2 Edge versions",
+                        "last 2 Opera versions",
+                        "last 2 Safari versions",
+                        "ie 11"
+                      ]
                     },
                   }
                 ]
-              ]
-            }
+              ],
+              "plugins": ["@babel/plugin-transform-arrow-functions"]
+            },            
           }
         }
       ]
