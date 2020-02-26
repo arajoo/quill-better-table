@@ -454,8 +454,8 @@ class TableContainer extends Container {
     return node
   }
 
-  constructor (scroll, domNode) {
-    super(scroll, domNode)
+  constructor (domNode) {
+    super(domNode)
     this.updateTableWidth()
   }
 
@@ -941,8 +941,8 @@ TableContainer.className = "quill-better-table"
 TableContainer.tagName = "TABLE"
 
 class TableViewWrapper extends Container {
-  constructor (scroll, domNode) {
-    super(scroll, domNode)
+  constructor (domNode) {
+    super(domNode)
     const quill = Quill.find(scroll.domNode.parentNode)
     domNode.addEventListener('scroll', (e) => {
       const tableModule = quill.getModule('better-table')
