@@ -7,7 +7,8 @@ import TableOperationMenu from './modules/table-operation-menu'
 import {
   matchTableCell,
   matchTableHeader,
-  matchTable
+  matchTable,
+  matchTableCol
 } from './utils/node-matchers'
 
 import { getEventComposedPath } from './utils/index'
@@ -150,6 +151,7 @@ class BetterTable extends Module {
 
     // add Matchers to match and render quill-better-table for initialization
     // or pasting
+    quill.clipboard.addMatcher('col', matchTableCol)
     quill.clipboard.addMatcher('td', matchTableCell)
     quill.clipboard.addMatcher('th', matchTableHeader)
     quill.clipboard.addMatcher('table', matchTable)

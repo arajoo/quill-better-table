@@ -11,8 +11,10 @@ export function matchTableCell (node, delta, scroll) {
     : row.parentNode.parentNode;
   const rows = Array.from(table.querySelectorAll('tr'));
   const cells = Array.from(row.querySelectorAll('td'));
-  const rowId = rows.indexOf(row) + 1;
-  const cellId = cells.indexOf(node) + 1;
+  const rowId = node.getAttribute('data-row') || rows.indexOf(row) + 1;
+  // Cell Id is in a div under the td element
+  const cellDivId = node.firstElementChild ? node.firstElementChild.getAttribute('data-cell') : null;
+  const cellId = cellDivId || cells.indexOf(node) + 1;
   const colspan = node.getAttribute('colspan') || false
   const rowspan = node.getAttribute('rowspan') || false
   const cellBg = node.getAttribute('data-cell-bg') || node.style.backgroundColor // The td from external table has no 'data-cell-bg' 
@@ -186,7 +188,9 @@ export function matchTable (node, delta, scroll) {
     return delta
   } else {
     for (let i = 0; i < maxCellsNumber - colsNumber; i++) {
-      newColDelta.insert('\n', { 'table-col': true })
+      newColDelta.insert('\n', { 'table-col': {
+        width: '100'
+      } })
     }
     
     if (colsNumber === 0) return newColDelta.concat(delta)
@@ -205,4 +209,16 @@ export function matchTable (node, delta, scroll) {
       return finalDelta
     }, new Delta())
   }
+}
+
+/**
+ * Match/Rebuild Col Group
+ */
+export function matchTableCol (node, delta, scroll) {
+  delta.insert('\n', {
+    'table-col': {
+      width: node.width || '100'
+    }
+  });
+  return delta;
 }
