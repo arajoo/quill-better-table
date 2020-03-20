@@ -322,6 +322,27 @@ BetterTable.keyboardBindings = {
       }
       return true
     }
+  }, 
+
+
+  'table-before enter': {
+    key: 'Enter',
+    shiftKey: null,
+    collapsed: true,
+    format: ['table-col', 'table-view'],  
+    handler(range, context) {
+      // Handle Enter Key before the table (when selecting table left side)
+      // Regular insertText does not insert correctly, insert a blot into the wrapper's parent
+      // As a sibling before this table
+      const tableViewWrapperBlot = findAncestor(context.line, TableViewWrapper);
+      if(tableViewWrapperBlot) {
+        const node = document.createTextNode('\n');
+        const siblingBlot = tableViewWrapperBlot.scroll.create(node);
+        tableViewWrapperBlot.parent.insertBefore(siblingBlot, tableViewWrapperBlot);
+        this.quill.setSelection(range.index, 0, Quill.sources.USER);
+      }      
+      return false;
+    }
   }
 }
 
@@ -391,6 +412,18 @@ function isInTableCell (current) {
       ? true
       : isInTableCell(current.parent)
     : false
+}
+
+function findAncestor (blot, ancestorType) {
+  if(!blot) {
+    return null;
+  } else if(blot instanceof ancestorType) {
+    return blot;
+  } else if (blot.parent instanceof ancestorType) {
+    return blot.parent;
+  }
+
+  return findAncestor(blot.parent, ancestorType);
 }
 
 export default BetterTable;

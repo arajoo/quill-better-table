@@ -875,6 +875,30 @@ class TableViewWrapper extends Container {
   table () {
     return this.children.head
   }
+
+  optimize(context) {
+    super.optimize(context);
+
+    if(this.domNode && this.domNode.parentNode && this.parent) {
+      if(!this.domNode.nextElementSibling) {
+        // Add a text insertion point after this table
+        const node = document.createTextNode('\uFEFF');
+        const siblingBlot = this.scroll.create(node);
+        this.parent.appendChild(siblingBlot);
+      }      
+    }
+  }
+
+  update(mutations, context) {
+    super.update(mutations, context);
+    mutations.forEach(mutation => {
+      // Ensure we can insert Text Before the table (Selection is on Table Left Side)
+      if (mutation.type === 'characterData') {
+        const siblingBlot = this.scroll.create(mutation.target);
+        this.parent.insertBefore(siblingBlot, this);
+      }
+    });
+  }
 }
 TableViewWrapper.blotName = "table-view"
 TableViewWrapper.className = "quill-better-table-wrapper"
